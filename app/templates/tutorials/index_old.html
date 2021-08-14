@@ -1,0 +1,393 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% load static %}
+    {% csrf_token %}
+    <style>
+        .footer {
+            display: none !important;
+        }
+
+        .table-container {
+            display: table;
+            width: 100%;
+        }
+
+        .table-container .table-row {
+            height: 100%;
+            display: table-row;
+        }
+
+        .table-container .table-row .table-col {
+            display: table-cell;
+            float: none;
+            vertical-align: top;
+        }
+
+        body::after {
+            opacity: 0;
+        }
+
+        body.shepherd-active::after {
+            content: "";
+            display: block;
+            background-color: #000;
+            opacity: 0.5;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 10000;
+        }
+
+        .shepherd-element.shepherd-open, .shepherd-target.shepherd-enabled {
+            z-index: 10000000;
+            position: relative;
+        }
+    </style>
+    <br><br>
+    <div class="container-fluid zero-padding zero-margin table-container">
+        <div class="row table-row ">
+            <div class="col-lg-9 col-md-9 zero-padding table-col">
+                 <div style="width: 100%; height: 100%; position: absolute; top: 0; left: 0;">
+                    <div id="cy"></div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3 side-menu table-col">
+                <br>
+                <div class="text-center">
+                    <div class="row">
+                        <div class="col-md-6 flud-user-score">
+                            <p class="lead zero-margin">Your Score</p>
+                            <p class="lead zero-margin" id="score" value="score" data-intro="Shows your current score."
+                               data-step="8"><i class="fas fa-spinner fa-pulse fa-fw"></i></p>
+                        </div>
+                        <div class="col-md-6 flud-current-score">
+                            <p class="lead zero-margin">Top Score</p>
+                            <p class="lead zero-margin" id="currentTopScore"><i
+                                    class="fas fa-spinner fa-pulse fa-fw"></i></p>
+                            {#                        <br> {{ top_scorer }}#}
+                        </div>
+                    </div>
+                </div>
+
+                <br>
+
+                <div class="">
+                    <div class="weights-legend gs-full-width">
+                        <span style="float: left; color: #08306b;">Low priority</span>
+                        <span style="float: right; color: #ffffff;">High priority</span>
+                    </div>
+                    <ul class="list-group scores-list" id="accordion" role="tablist" aria-multiselectable="true">
+
+                        <li class="list-group-item dpp collapsed" role="button" data-toggle="collapse"
+                            data-parent="#accordion"
+                            href="#DPPTools" aria-expanded="false" aria-controls="DPPTools">
+                            <i class="far fa-plus-square accordian-icon fa-fw"></i>
+                            <span class="badge flud-score" id="downwardPointingPathScore">
+                                <i class="fas fa-spinner fa-pulse fa-fw"></i>
+                            </span>
+                            Downward pointing paths
+                        </li>
+                        <div id="DPPTools" class="panel-collapse collapse score-tools" role="tabpanel"
+                             aria-labelledby="headingTwo" data-mode="DPP_MODE">
+                            <div class="panel-body">
+                                <p class="small">Maximize the number of downward pointing paths from triangles to
+                                    rectangles/squares.</p>
+                                <div class="row text-center">
+                                    <button type="button" class="btn btn-xs btn-default" title="Hint" value="clue"
+                                            id="hint"
+                                            data-intro="Get a clue on what node to move." data-step="4"
+                                            onclick="fludToolbox.DPPTool.hint();">Clue <i
+                                            class="far fa-lightbulb"></i>
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <li class="list-group-item edgecrossings collapsed" role="button" data-toggle="collapse"
+                            data-parent="#accordion"
+                            href="#ECTools" aria-expanded="false" aria-controls="ECTools">
+                            <i class="far fa-plus-square accordian-icon fa-fw"></i>
+                            <span class="badge flud-score" id="edgeCrossingsScore"><i
+                                    class="fas fa-spinner fa-pulse fa-fw"></i></span>
+                            Non-crossing edge pairs
+                        </li>
+                        <div id="ECTools" class="panel-collapse collapse score-tools" role="tabpanel"
+                             aria-labelledby="headingTwo" data-mode="EC_MODE">
+                            <div class="panel-body">
+                                <p class="small">Maximize the number of non-crossing edge pairs.</p>
+                            </div>
+                        </div>
+
+                        <li class="list-group-item edgelength collapsed" role="button" data-toggle="collapse"
+                            data-parent="#accordion"
+                            href="#ELTools" aria-expanded="false" aria-controls="ELTools">
+                            <i class="far fa-plus-square accordian-icon fa-fw"></i>
+                            <span class="badge flud-score" id="edgeLengthScore"><i
+                                    class="fas fa-spinner fa-pulse fa-fw"></i></span>
+                            Cluster connected nodes
+                        </li>
+                        <div id="ELTools" class="panel-collapse collapse score-tools" role="tabpanel"
+                             aria-labelledby="headingTwo" data-mode="EL_MODE">
+                            <div class="panel-body">
+                                <p class="small">Bring connected nodes closer to each other.</p>
+{#                                <button type="button" class="btn btn-xs btn-default"#}
+{#                                        onclick="fludToolbox.ELTool.hint();">#}
+{#                                    <i class="far fa-hand-pointer"></i>#}
+{#                                    neighbourhood#}
+{#                                </button>#}
+
+                            </div>
+                        </div>
+
+                        <li class="list-group-item nodedistribution collapsed" role="button" data-toggle="collapse"
+                            data-parent="#accordion"
+                            href="#NDTools" aria-expanded="false" aria-controls="NDTools">
+                            <i class="far fa-plus-square accordian-icon fa-fw"></i>
+                            <span class="badge flud-score" id="nodeDistributionScore"><i
+                                    class="fas fa-spinner fa-pulse fa-fw"></i></span>
+                            Node distribution
+                        </li>
+                        <div id="NDTools" class="panel-collapse collapse score-tools" role="tabpanel"
+                             aria-labelledby="headingTwo" data-mode="CUSTOM_MODE">
+                            <div class="panel-body">
+                                <p class="small">Maximize the distance between disconnected pair of nodes.</p>
+                            </div>
+                        </div>
+
+
+                        <li class="list-group-item nodeedgedistance collapsed" role="button" data-toggle="collapse"
+                            data-parent="#accordion"
+                            href="#NEDTools" aria-expanded="false" aria-controls="NEDTools">
+                            <i class="far fa-plus-square accordian-icon fa-fw"></i>
+                            <span class="badge flud-score" id="nodeEdgeDistanceScore"><i
+                                    class="fas fa-spinner fa-pulse fa-fw"></i></span>
+                            Node edge separation
+                        </li>
+                        <div id="NEDTools" class="panel-collapse collapse score-tools" role="tabpanel"
+                             aria-labelledby="headingTwo" data-mode="CUSTOM_MODE">
+                            <div class="panel-body">
+                                <p class="small">Increase separation between nodes and edges.</p>
+                            </div>
+                        </div>
+
+                        <li class="list-group-item custom collapsed" role="button" data-toggle="collapse"
+                            data-parent="#accordion"
+                            href="#CustomTools" aria-expanded="false" aria-controls="CustomTools">
+                            <i class="far fa-plus-square accordian-icon fa-fw"></i>
+                            {#                        <span class="badge" id="customScore"><i class="fas fa-spinner fa-pulse fa-fw"></i></span>#}
+                            Custom
+                        </li>
+                        <div id="CustomTools" class="panel-collapse collapse score-tools" role="tabpanel"
+                             aria-labelledby="headingTwo" data-mode="CUSTOM_MODE">
+                            <div class="panel-body">
+                                <ul style="list-style-position: inside;padding-left:0;">
+                                    <li class="small">
+                                        Arrange triangles to the top of the graph.
+                                    </li>
+                                    <li class="small">
+                                        Arrange rectangles to the bottom of the graph.
+                                    </li>
+                                    <li class="small">
+                                        Arrange similar nodes closer to each other.
+                                    </li>
+                                </ul>
+
+                                {#                                <button type="button" class="btn btn-xs btn-default"#}
+                                {#                                        onclick="fludToolbox.setMode(CUSTOM_MODE);">#}
+                                {#                                    <i class="far fa-hand-pointer"></i>#}
+                                {#                                    Custom Mode#}
+                                {#                                </button>#}
+                            </div>
+                        </div>
+                    </ul>
+                </div>
+
+                <div class="text-center">
+                    <p class="lead">Select Nodes</p>
+                    <div class="flud-btn-toolbar" role="toolbar" aria-label="...">
+                        <div class="btn-group" data-toggle="buttons">
+                            <label class="btn btn-sm btn-default"
+                                   onClick="fludToolbox.CustomTool.toggleSelect(this, TRIANGLE);">
+                                <input type="checkbox" autocomplete="off"> <span
+                                    class="glyphicon glyphicon-triangle-top"
+                                    aria-hidden="true"></span>
+                            </label>
+                            <label class="btn btn-sm btn-default"
+                                   onClick="fludToolbox.CustomTool.toggleSelect(this, ELLIPSE);">
+                                <input type="checkbox" autocomplete="off"> <i class="far fa-circle"></i>
+                            </label>
+                            <label class="btn btn-sm btn-default"
+                                   onClick="fludToolbox.CustomTool.toggleSelect(this, SQUARE);">
+                                <input type="checkbox" autocomplete="off"> <i class="far fa-square"></i>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="text-center">
+                    <p class="lead">Arrange Nodes</p>
+                    <div class="flud-btn-toolbar" role="toolbar" aria-label="...">
+                        <div class="btn-group" role="group" aria-label="...">
+                            <button type="button" class="btn btn-default"
+                                    onclick="fludToolbox.CustomTool.layout(HORIZONTAL_LAYOUT);"><i
+                                    class="fas fa-minus fa-fw"></i></button>
+                            <button type="button" class="btn btn-default"
+                                    onclick="fludToolbox.CustomTool.layout(VERTICAL_LAYOUT);"><i
+                                    class="fas fa-minus fa-fw"
+                                    data-fa-transform="rotate-90"></i>
+                            </button>
+                            <button id="expandTool" type="button" class="btn btn-default"
+                                    onclick="fludToolbox.CustomTool.layout(EXPAND_LAYOUT);"><i
+                                    class="glyphicon glyphicon-resize-full fa-fw"></i></button>
+                            <button id="squeezeTool" type="button" class="btn btn-default"
+                                    onclick="fludToolbox.CustomTool.layout(SQUEEZE_LAYOUT);"><i
+                                    class="glyphicon glyphicon-resize-small fa-fw"></i></button>
+                            {#                            <button type="button" class="btn btn-default"#}
+                            {#                                    onclick="fludToolbox.SATool.hint();"><i#}
+                            {#                                    class="fas fa-magic fa-fw"></i></button>#}
+                        </div>
+
+                        <div id="UndoRedoBtnGroup" class="btn-group" role="group" aria-label="...">
+                            <button type="button" class="btn btn-default" title="Undo last change" value="undo"
+                                    id="undo"
+                                    data-intro="Undo previous action." data-step="2"><i class="fas fa-undo fa-fw"></i>
+                            </button>
+                            <button type="button" class="btn btn-default" title="Redo change" value="redo" id="redo"
+                                    data-intro="Redo previous action." data-step="3"><i class="fas fa-redo fa-fw"></i>
+                            </button>
+                        </div>
+
+                        <br>
+                        <br>
+
+                        <div class="btn-group" role="group" aria-label="...">
+                            <button type="button" class="btn btn-xs btn-default"
+                                    onclick="fludToolbox.CustomTool.layout(CIRCLE_LAYOUT);"><br>Circle
+                            </button>
+                            <button type="button" class="btn btn-xs btn-default"
+                                    onclick="fludToolbox.CustomTool.layout(CONCENTRIC_LAYOUT);"><br>Concentric
+                            </button>
+                            <button type="button" class="btn btn-xs btn-default"
+                                    onclick="fludToolbox.CustomTool.layout(SQUARE_LAYOUT);"><br>Square
+                            </button>
+                            <button type="button" class="btn btn-xs btn-default"
+                                    onclick="fludToolbox.CustomTool.layout(GRID_LAYOUT);"><br>Grid
+                            </button>
+                            <button type="button" class="btn btn-xs btn-default"
+                                    onclick="fludToolbox.CustomTool.layout(TREE_LAYOUT);"><br>Tree
+                            </button>
+                            <button type="button" class="btn btn-xs btn-default"
+                                    onclick="fludToolbox.CustomTool.layout(SPRING_LAYOUT);">Spring
+                                <br>Embedder
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+                <hr>
+
+                <div class="text-center">
+                    <button id="finishBtn" type="button" class="btn btn-sm btn-primary" data-toggle="modal"
+                            data-target="#finishedDialogueModal" value="finished"
+                            data-intro="When you're done, click here to see how you rank." data-step="9">Finished
+                    </button>
+                </div>
+
+                <button title="Help" type="button" class="btn btn-sm btn-primary" value="help" id="help"><i
+                        class="fa fa-question"></i> Help
+                </button>
+
+                <br><br>
+                {#                <br><br>#}
+
+            </div>
+        </div>
+
+    </div>
+    <!-- Graph -->
+
+
+    <!-- Menu Sidebar -->
+    {#    <div class="side-menu"></div>#}
+
+    <!-- Help -->
+    </div>
+    <!-- end class = side_menu -->
+    <p style="z-index:100000;position:fixed; top:40%; left:40%;"
+       data-intro="Welcome to Flud! To leave this tour, please press either the Skip button below or just click anywhere outside this box."
+       data-step='1'></p>
+    </div>
+
+    <!-- Finished Dialogue Modal -->
+    <div id="finishedDialogueModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Results</h4>
+                </div>
+                <div class="modal-body" id="finishedDescription">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" id="finishGameBtn">Finish
+                    </button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Keep playing</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- login modal if user is Anon -->
+    <div id="AnonymousUserLoginPromptModel" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content -->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">x</button>
+                    <h4 class="modal-title">Login?</h4>
+                </div>
+                <div class="modal-body" id="login_description">
+                    <p>You have the new high score! Would you like to log in?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" id="anon_login">Log In</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Continue Anonymously</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="{% static 'components/cytoscape/dist/cytoscape.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'components/cytoscape-panzoom/cytoscape.js-panzoom.css' %}"/>
+    <script type="text/javascript" src="{% static 'components/cytoscape-panzoom/cytoscape-panzoom.js' %}"></script>
+
+    <script type="text/javascript" src="{% static 'components/webcola/WebCola/cola.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'components/cytoscape-cola/cytoscape-cola.js' %}"></script>
+
+    <script src="{% static 'js/ajax_calls.js' %}"></script>
+
+    <!-- Load the Graph Data -->
+    <script src="{% static 'js/gameplay.js' %}"></script>
+    <script src="{% static 'js/cytoscape-simulated-annealing.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/tether.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/shepherd.min.js' %}"></script>
+    <script src="{% static 'js/tutorial_jsons.js' %}"></script>
+    <script src="{% static 'js/tours.js' %}"></script>
+    <script src="{% static 'js/tutorial.js' %}"></script>
+
+
+    <script>
+        var tutorial_number = {{tutorial_number | safe}};
+
+        $(document).ready(function () {
+            tutorial.init(tutorial_number);
+        });
+    </script>
+
+{% endblock %}

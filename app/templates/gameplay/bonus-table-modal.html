@@ -1,0 +1,109 @@
+<div class="modal fade" id="bonusTableModal" tabindex="-1" role="dialog" aria-labelledby="bonusTableModal">
+    <div class="modal-dialog modal-lg" role="document" style="width: 75%;">
+        <div class="modal-content">
+            <div class="modal-header">
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                 <span aria-hidden="true">&times;</span>
+               </button>
+                <h4 class="modal-title" id="myModalLabel">Instructions</h4>
+            </div>
+            <div class="modal-body ">
+              <!-- <b>Note:</b> If the amount next to a subscore says $0, then there is no bonus left to be earned from that subscore. Try to focus on subscores with non-zero bonus prize money. -->
+              <ol>
+                <li>Your total score depends on different subgoals and your aim is to achieve a high total score.</li>
+                <li>Sometimes when you are working on one of the sub goals, you may gain/lose points for other subgoals.</li>
+                <li>In this game you earn bonus for improving the <span id='mainGoal' style="font-weight:bold"></span> score.</li>
+                <li>You earn bonus only if you beat the initial top score.</li>
+                <li>Higher the score, higher the bonus!</li>
+              </ol>
+
+              <!-- <br> -->
+              <br>
+
+              <div class="row">
+                <div class="col-md-12">
+                  <div id="dppBonusPanel" class="panel panel-default " style="display:none">
+                      <div class="panel-heading">
+                          <h3 class="panel-title">
+                            Downward Pointing Paths
+                          </h3>
+                      </div>
+                      <div class="panel-body">
+                        You need to increase the Downward Pointing Path score by the following number of points.
+                        <ul id="dppBonusTable">
+
+                        </ul>
+                      </div>
+                  </div>
+                </div>
+
+                <div class="col-md-12">
+                  <div id="ecBonusPanel" class="panel panel-default " style="display:none">
+                      <div class="panel-heading">
+                          <h3 class="panel-title">
+                            Non-crossing edge pairs
+                          </h3>
+                      </div>
+                      <div class="panel-body">
+                        You need to increase the Non-crossing edge pairs score by the following number of points.
+                        <ul id="ecBonusTable">
+
+                        </ul>
+                      </div>
+                  </div>
+                </div>
+
+                <div class="col-md-12">
+                  <div id="elBonusPanel" class="panel panel-default " style="display:none">
+                      <div class="panel-heading">
+                          <h3 class="panel-title">
+                            Edge length
+                          </h3>
+                      </div>
+                      <div class="panel-body">
+                        You need to increase the Edge length score by the following number of points.
+                        <ul id="elBonusTable">
+
+                        </ul>
+                      </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-12">
+                  <div id="ndBonusPanel" class="panel panel-default " style="display:none">
+                      <div class="panel-heading">
+                          <h3 class="panel-title">
+                            Node distribution
+                          </h3>
+                      </div>
+                      <div class="panel-body">
+                        You need to increase the Node distribution score by the following number of points.
+                        <ul id="ndBonusTable">
+
+                        </ul>
+                      </div>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div id="nedBonusPanel" class="panel panel-default " style="display:none">
+                      <div class="panel-heading">
+                          <h3 class="panel-title">
+                            Node edge separation
+                          </h3>
+                      </div>
+                      <div class="panel-body">
+                        You need to increase the Node edge separation score by the following number of points.
+                        <ul id="nedBonusTable">
+
+                        </ul>
+                      </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+        </div>
+    </div>
+</div>

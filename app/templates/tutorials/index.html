@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% load static %}
+    {% csrf_token %}
+    <style>
+        .footer {
+            display: none !important;
+        }
+
+        body::after {
+            opacity: 0;
+        }
+
+        body.shepherd-active::after {
+            content: "";
+            display: block;
+            background-color: #000;
+            opacity: 0.5;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 10000;
+        }
+
+        .shepherd-element.shepherd-open, .shepherd-target.shepherd-enabled {
+            z-index: 10000000;
+            position: relative;
+        }
+    </style>
+
+    {% include 'gameplay/game-main.html' %}
+
+    <!-- Finished Dialogue Modal -->
+    {% include 'gameplay/finished-modal.html' %}
+    {% include 'gameplay/gameover-modal.html' %}
+    <!-- login modal if user is Anon -->
+    {% include 'gameplay/anonymous-login-prompt.html' %}
+
+
+    <script type="text/javascript" src="{% static 'components/cytoscape/dist/cytoscape.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'components/cytoscape-panzoom/cytoscape.js-panzoom.css' %}"/>
+    <script type="text/javascript" src="{% static 'components/cytoscape-panzoom/cytoscape-panzoom.js' %}"></script>
+
+    <script type="text/javascript" src="{% static 'components/webcola/WebCola/cola.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'components/cytoscape-cola/cytoscape-cola.js' %}"></script>
+
+    <script src="{% static 'js/ajax_calls.js' %}"></script>
+
+    <!-- Load the Graph Data -->
+    <script src="{% static 'js/gameplay.js' %}"></script>
+    <script src="{% static 'js/cytoscape-simulated-annealing.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/tether.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/shepherd.min.js' %}"></script>
+    <script src="{% static 'js/tutorial_jsons.js' %}"></script>
+    <script src="{% static 'js/tours.js' %}"></script>
+    <script src="{% static 'js/tutorial.js' %}"></script>
+
+    <script>
+        var tutorial_number = {{tutorial_number | safe}};
+        var num_steps = 100;
+
+        $(document).ready(function () {
+            tutorial.init(tutorial_number);
+        });
+    </script>
+
+{% endblock %}

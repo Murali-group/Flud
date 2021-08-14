@@ -1,0 +1,17 @@
+/*
+    Main style for index.html
+
+*/
+
+/* TABLE OF CONTENTS
+	About Section
+*/
+
+/* We are doing a desktop-first design approach */
+
+#about {
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding-top: 80px;
+}

@@ -1,0 +1,94 @@
+{% extends 'base.html' %} {% block content %} {% load static %}
+
+<!-- <br><br> -->
+<style>
+
+
+</style>
+<link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.css">
+<script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.js"></script>
+
+<div class="container-fluid" style="margin: 10px; max-width: 500px; ">
+
+  <div class="panel panel-primary">
+    <!-- Default panel contents -->
+    <div class="panel-heading text-center">Top Players</div>
+
+      <table
+        id="leaderboardTable"
+        data-sort-name="topscore"
+        data-sort-order="desc">
+        <thead>
+          <tr>
+            <!-- <th data-field="index">#</th> -->
+            <th data-field="player">Player</th>
+            <th data-field="topscore">Top Score</th>
+          </tr>
+        </thead>
+      </table>
+
+  </div>
+</div>
+
+<script>
+  var topScorers = {{top_scorers | safe}};
+  var gameId      = {{ game_id|escapejs }};
+
+  var leaderboard = {
+    $table: $('#leaderboardTable'),
+    data: [],
+    socket:  new WebSocket('ws://' + window.location.host + '/ws/games/' + gameId + '/leaderboard'),
+    init: function(){
+      for (var i = 0; i < topScorers.length; i++) {
+        leaderboard.data.push({
+          'player': topScorers[i].user.email,
+          'topscore': topScorers[i].topscore,
+        });
+      }
+      leaderboard.$table.bootstrapTable({data: leaderboard.data})
+
+      leaderboard.socket.onmessage = function(e) {
+          var data = JSON.parse(e.data);
+          var topscore = data['topscore'];
+          var player = data['user'];
+          var playerfound = false;
+
+          for (var i = 0; i < leaderboard.data.length; i++) {
+            if (player === leaderboard.data[i]['player']) {
+              leaderboard.data[i]['topscore'] = topscore > leaderboard.data[i]['topscore'] ? topscore : leaderboard.data[i]['topscore'];
+              playerfound = true;
+            }
+          }
+          if (!playerfound) {
+            leaderboard.data.push({
+              'player': topScorers[i].user.email,
+              'topscore': topScorers[i].topscore,
+            });
+          }
+
+          leaderboard.$table.bootstrapTable('load', leaderboard.data);
+      };
+
+      leaderboard.socket.onclose = function(e) {
+          console.error('Chat socket closed unexpectedly');
+      };
+    },
+    responseHandler: function (res) {
+      res.forEach(function (row, i) {
+        row.index = i
+      })
+      return res;
+    }
+  }
+  leaderboard.init()
+
+
+
+  // leaderboard.socket.send(JSON.stringify({
+  //   'player': topScorers[i].user.email,
+  //   'topscore': topScorers[i].topscore,
+  // }));
+
+</script>
+
+{% endblock %}

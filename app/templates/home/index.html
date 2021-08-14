@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% load static %}
+
+    <div id="page-top" data-spy="scroll">
+
+        <!-- buttons and title -->
+        <section class="cd-intro" id="home">
+            <div class="cd-intro-content parallax">
+                <img src="{% static 'img/flud_logo1.png' %}" alt="Flud Logo">
+                <p>
+                    <span data-content="A puzzle game for the benefit of science">A puzzle game for the benefit of science</span>
+                </p>
+                <div class="action-wrapper">
+                    <a href="/games/" class="cd-btn main-action">Puzzles</a>
+                    <!-- <a href="#about" class="cd-btn page-scroll">Learn More</a> -->
+                    <a href="/tutorial/" class="cd-btn page-scroll">Tutorial</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <!-- <section id="about" class="cd-intro">
+            <div class="cd-intro-content parallax" style="width:50%;">
+                <h1>What is Flud?</h1>
+                <div class="embed-responsive embed-responsive-16by9">
+                    <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/6lH76kzHlDk" allowfullscreen></iframe>
+                </div>
+                <a href="#" class="main-btn"><span class="fa fa-envelope" aria-hidden="true"></span>&nbsp; Contact Us</a>
+                <a href="#" class="main-btn"><span class="fa fa-code-fork" aria-hidden="true"></span>&nbsp; Fork Us on GitHub</a>
+                <hr style="background: rgba(0,0,0,.1); border:0; height:1px" />
+                <a href="#home" class="main-btn page-scroll"><span class="fa fa-arrow-up" aria-hidden="true"></span></a>
+            </div>
+        </section> -->
+
+    </div>
+
+{% endblock %}

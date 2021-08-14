@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% load static %}
+
+    <br><br>
+    <style>
+        .card:hover .caption {
+            display: flex;
+        }
+
+        /* Caption over Image */
+        .caption {
+            width: 100%;
+            height: 100%;
+            top: 0;
+            position: absolute;
+            text-align: center;
+
+            justify-content: center;
+            align-items: center;
+
+            z-index: 100;
+
+            background: #000;
+            background: -webkit-linear-gradient(bottom, #b3e0ff 40%, rgba(0, 0, 0, 0) 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
+            display: none;
+        }
+    </style>
+
+    <div class="container-fluid" style="margin: 10px;">
+
+        <div class="flud-games row ">
+            <!-- <div class="col-md-1 col-xs-12 zero-padding">
+            </div> -->
+            {% for g in games %}
+                <div class="col-md-3 col-xs-12 zero-padding" style="margin:5px 0">
+                    <div class="card">
+                        <div class="thumbnail zero-margin gs-full-width text-center" style="text-overflow: clip;  overflow: hidden; white-space: nowrap;">
+                            <!-- <small class="text-muted" >{{g.name}}</small> -->
+                            <img src="{% static "" %}img/graphs/{{ g.id }}.png"
+                                 onerror="this.src='{% static "" %}img/graphs/5.png';" class="img-thumbnail"
+                                 style="width: 100%; height: 333px;"/>
+
+                            <small class="text-muted">Top Score: {{ g.score|floatformat:"0" }} by {{ g.top_scorer }}</small>
+                        </div>
+                        <div class="caption">
+                            <a href="/games/{{ g.id }}" class="main-btn"><b>Play</b></a>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="col-md-1 col-xs-12 zero-padding"> -->
+                <!-- </div> -->
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,151 @@
+<style>
+    .table-container {
+        display: table;
+        width: 100%;
+        height: 100%;
+    }
+
+    .table-container .table-row {
+        height: 100%;
+        display: table-row;
+    }
+
+    .table-container .table-row .table-col {
+        display: table-cell;
+        height: 100%;
+        float: none;
+        vertical-align: top;
+        position: relative;
+    }
+</style>
+
+
+<div class="container-fluid zero-padding zero-margin table-container">
+    <div class="row table-row ">
+
+        <!-- Graph -->
+        <div class="col-lg-6 col-md-6 zero-padding table-col">
+            <div id="graphContainer" style="width: 100%; height: 100%; position: absolute; top: 0; left: 0;">
+                <div id="cy"></div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-3 table-col" style="background-color:ghostwhite;">
+          <br>
+          <div id="dppHintRequest" class="alert alert-info alert-dismissible" role="alert" style="display:none">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+            <small><i class="fas fa-spinner fa-pulse fa-fw"></i> Generating a new clue for downward pointing path subgoal in <span id='dppHintTimer'>3</span> seconds.</small>
+            <!-- <br><br> -->
+            <!-- <button type="button" class="btn btn-sm btn-info">Take this action</button> -->
+          </div>
+          <div id="dppHelp" class="alert alert-warning alert-dismissible" role="alert" style="display:none">
+            <!-- <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button> -->
+            <small>A <b>downward pointing path</b> is a sequence of downward pointing edges (blue) that starts at a <b>triangle</b> and ends at a <b>rectangle</b>.</small>
+            <br><br>
+            <small><b>Important Instruction:</b> If you are stuck, try to make red edges downward pointing one by one following a path from triangles to rectangles.</small>
+            <br><br>
+            <small> Please note, you only get the points when you create a new path. There are no points for just making an edge downward pointing.  <b>Focus on paths!</b></small>
+
+          </div>
+          <div id="dppHintAlert" class="alert alert-info alert-dismissible" role="alert" style="display:none">
+            <!-- <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button> -->
+            <small>Try making the highlighted path point downward.</small>
+            <!-- <br> -->
+            <!-- <a type="button" class="btn btn-xs btn-default action" title="Hint Help" -->
+                    <!-- id="hintHelp" href="https://youtu.be/9UxPSYmY7Lc" target="_blank"> -->
+                    <!-- Remind me how <i class="fab fa-youtube red"></i> -->
+            </a>
+          </div>
+          <div id="ecHintAlert" class="alert alert-info alert-dismissible" role="alert" style="display:none">
+            <!-- <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button> -->
+            <small>Try removing the highlighted edge crossing.</small>
+            <!-- <br><br>
+            <a type="button" class="btn btn-xs btn-default action" title="Hint Help"
+                    id="hintHelp" href="https://youtu.be/9UxPSYmY7Lc" target="_blank">
+                    Remind me how <i class="fab fa-youtube red"></i>
+            </a> -->
+          </div>
+          <div id="elTooCloseHintAlert" class="alert alert-info alert-dismissible" role="alert" style="display:none">
+            <!-- <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button> -->
+            <small>Try moving the highlighted nodes apart. They are too close right now! </small>
+            <!-- <br><br>
+            <a type="button" class="btn btn-xs btn-default action" title="Hint Help"
+                    id="hintHelp" href="https://youtu.be/9UxPSYmY7Lc" target="_blank">
+                    Remind me how <i class="fab fa-youtube red"></i>
+            </a> -->
+          </div>
+          <div id="elTooFarHintAlert" class="alert alert-info alert-dismissible" role="alert" style="display:none">
+            <!-- <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button> -->
+            <small>Try bringing the highlighted nodes closer. They are too far right now! </small>
+            <!-- <br><br>
+            <a type="button" class="btn btn-xs btn-default action" title="Hint Help"
+                    id="hintHelp" href="https://youtu.be/9UxPSYmY7Lc" target="_blank">
+                    Remind me how <i class="fab fa-youtube red"></i>
+            </a> -->
+          </div>
+          <div id="ndHintAlert" class="alert alert-info alert-dismissible" role="alert" style="display:none">
+            <!-- <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button> -->
+            <small>Try moving the highlighted nodes apart. They are too close right now! </small>
+            <!-- <br><br>
+            <a type="button" class="btn btn-xs btn-default action" title="Hint Help"
+                    id="hintHelp" href="https://youtu.be/9UxPSYmY7Lc" target="_blank">
+                    Remind me how <i class="fab fa-youtube red"></i>
+            </a> -->
+          </div>
+          <div id="nedHintAlert" class="alert alert-info alert-dismissible" role="alert" style="display:none">
+            <!-- <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button> -->
+            <small>Try moving the highlighted node away from the highlighted edge. They are too close right now! </small>
+            <!-- <br><br>
+            <a type="button" class="btn btn-xs btn-default action" title="Hint Help"
+                    id="hintHelp" href="https://youtu.be/9UxPSYmY7Lc" target="_blank">
+                    Remind me how <i class="fab fa-youtube red"></i>
+            </a> -->
+          </div>
+          <div id="dppNoHintAlert" class="alert alert-info alert-dismissible" role="alert" style="display:none">
+            <!-- <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button> -->
+            <small>Sorry, cannot find a clue!  But you can still create more downward pointing paths. <br/> <br/> <b>Tip:</b> Try to lay out downward pointing paths from triangles to rectangles one by one!</small>
+            <!-- <button type="button" class="btn btn-sm btn-info">Take this action</button> -->
+          </div>
+
+
+            <div id="exampleLayoutTip" class="alert alert-success alert-dismissible" role="alert" >
+              <!-- style="display:none"> -->
+              <a id="exampleLayoutBtn" class="action" data-toggle="modal"
+                  data-target="#exampleLayoutModal" value="exampleLayout" style="cursor: pointer">
+              <small>An example of a good solution created in a different game. Click here to zoom!<br></small>
+              {% if mode == 'dpp' %}
+                <img src="/static/img/game/layout-example-dpp.png"  class="rounded" style="border: 1px solid black; height:10vh" alt="Increase downward pointing paths">
+              {% else %}
+                <img src="/static/img/game/layout-example.png"  class="rounded" style="border: 1px solid black; height:10vh" alt="Increase downward pointing paths">
+              {% endif %}
+                </a>
+            </div>
+
+
+        </div>
+
+        <!-- Menu Sidebar -->
+        <div class="col-lg-3 col-md-3 side-menu table-col">
+            {% include 'gameplay/game-sidebar.html' %}
+        </div>
+    </div>
+
+</div>
