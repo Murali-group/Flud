@@ -69,6 +69,6 @@ Feel free to fork and send us pull requests.
 # Contact
 If you have questions or suggestions about GraphSpace, please contact
 
-T.M. Murali (@tmmurali)
-Kurt Luther (@kluther)
-Aditya Bharadwaj (@adbharadwaj)
+- **Aditya Bharadwaj ([@adbharadwaj](https://github.com/adbharadwaj))**
+- **Kurt Luther ([@kluther](https://github.com/kluther))**
+- **T.M. Murali ([@tmmurali](https://github.com/tmmurali))**
