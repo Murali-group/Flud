@@ -15,4 +15,4 @@ production.py
 Flud_Server.egg-info
 debug*
 cronjob.log
-static/img/graphs/*
+app/static/img/graphs/*
