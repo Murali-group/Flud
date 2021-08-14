@@ -1,4 +1,4 @@
-<img src="https://github.com/Murali-group/flud/blob/master/app/static/img/flud_logo1.png" alt="Flud" width="100px">
+<img src="https://github.com/Murali-group/Flud/blob/develop/app/static/img/flud_logo1.png" alt="Flud" width="100px">
 
 ------
 # Flud: a game used for visualizing biological networks
