@@ -77,4 +77,4 @@ If you have questions or suggestions about Flud, please contact
 License
 =================
 
-GraphSpace is available under the GNU General Public License v2.0 license. See [LICENSE.md](https://github.com/Murali-group/Flud/blob/master/LICENSE.md) for more information.
+GraphSpace is available under the GNU General Public License v3.0 license. See [LICENSE](https://github.com/Murali-group/Flud/blob/master/LICENSE) for more information.
