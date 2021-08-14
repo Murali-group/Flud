@@ -67,7 +67,7 @@ Feel free to fork and send us pull requests.
 
 
 # Contact
-If you have questions or suggestions about GraphSpace, please contact
+If you have questions or suggestions about Flud, please contact
 
 - **Aditya Bharadwaj ([@adbharadwaj](https://github.com/adbharadwaj))**
 - **Kurt Luther ([@kluther](https://github.com/kluther))**
