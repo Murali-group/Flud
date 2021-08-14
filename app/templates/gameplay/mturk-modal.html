@@ -1,0 +1,23 @@
+<div class="modal fade" id="mturkModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+{#                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span#}
+{#                        aria-hidden="true">&times;</span></button>#}
+                <h4 class="modal-title" id="myModalLabel">Thanks for working on this task!</h4>
+            </div>
+            <div class="modal-body text-center">
+                <form id="mturk_form" action="{{ amazon_host }}/mturk/externalSubmit" method="POST">
+                    <textarea rows="4" cols="50" name="feedback">
+                    </textarea>
+                    <input type="hidden" id="assignmentId" value="{{ assignment_id }}" name="assignmentId"/>
+                    <br/>
+                    <input type="hidden" id="workerId" value="{{ worker_id }}" name="workerId"/>
+                    <input type="hidden" id="hitId" value="{{ hit_id }}" name="hitId"/>
+                    <button class="btn btn-success" type="submit" value="Submit">Finish and Submit HIT</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

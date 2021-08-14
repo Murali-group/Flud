@@ -1,0 +1,152 @@
+{% load static %}
+<!-- LogIn Modal -->
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Log In</h4>
+            </div>
+            <div class="modal-body">
+
+                <form method="post" id="login_form" class="login_form" role="form">
+                    {% csrf_token %}
+                    {% for field in login_form %}
+                        <div class="form-group">
+                            <span class="field_label">{{ field.label }}:</span>
+                            {{ field }}
+                        </div>
+                    {% endfor %}
+                    <p class="pull-right">
+                        <a name="forgot" href="forgot_password">Forgot Password</a> &nbsp; | &nbsp;
+                        <a href="#signup" data-toggle="modal" data-target="#signupModal">Create Account</a>
+                    </p>
+
+                    <button type="submit" name="signin" id="signinBtn" class="btn btn-lg btn-success">Submit</button>
+                    <button type="button" class="btn btn-lg btn-danger" data-dismiss="modal">Close</button>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Create Modal -->
+<div class="modal fade" id="signupModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Create Account</h4>
+            </div>
+            <div class="modal-body">
+
+                <form method="post" id="register_form" class="register_form" role="form">
+                    {% csrf_token %}
+                    <div class="register_fields">
+                        {% for field in register_form %}
+                            <div class="form-group">
+                                <span class="field_label">{{ field.label }}:</span>
+                                {{ field }}
+                            </div>
+                        {% endfor %}
+                        <button name="register" id="registerBtn" class="btn btn-lg btn-success">Register</button>
+                        <button type="button" class="btn btn-lg btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Forgot Modal -->
+<div class="modal fade" id="forgotModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Forgot Information</h4>
+            </div>
+            <div class="modal-body">
+
+                <form method="post" class="forgot_form" name="forgot_form" id="forgot_form" role="form">
+                    {% csrf_token %}
+                    <div class="forgot_fields">
+                        <div class="control-group">
+                            <label for="forgot_email">Email:</label>
+                            <input id="forgot_email" class="form-control" maxlength="32" type="text" name="forgot_email"
+                                   autocomplete="off"/>
+                        </div>
+                        <br/>
+                        <button type="submit" name="forgot" id="forgot_send" class="btn btn-lg btn-success">Send Email
+                        </button>
+                        <button type="button" class="btn btn-lg btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<nav class="navbar navbar-light navbar-fixed-top flud-header">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="nav navbar-brand flud-header-brand link-reset" href="/" style="display: flex">
+                <img src="{% static 'img/flud-icon1.png' %}" width="30" height="30" alt="Home"
+                     style="margin-right: 15px">
+
+                <h3 class="zero-margin zero-padding" style="display: inline">Flud</h3>
+            </a>
+        </div>
+
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+
+                <li class="nav-item {% if name == 'home' %}active{% endif %}">
+                    <a class="nav-link" href="/games">PUZZLES</a>
+                </li>
+                <li class="navbar-divider"></li>
+                <li class="nav-item {% if name == 'about_us' %}active{% endif %}">
+                    <a class="nav-link" href="/about_us">ABOUT</a>
+                </li>
+                <li class="navbar-divider"></li>
+                <!-- User Nav Buttons -->
+                {% if uid == None %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="#login" data-toggle="modal" data-target="#loginModal" id="login_but">
+                            LOG IN
+                        </a>
+                    </li>
+                    <li class="navbar-divider"></li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#signup" data-toggle="modal" data-target="#signupModal"
+                           id="signup_but">
+                            CREATE ACCOUNT
+                        </a>
+                    </li>
+                {% endif %}
+                <li class="nav-item dropdown {% if uid == None %}hidden{% endif %}" id="after_login">
+                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
+                       aria-haspopup="true"
+                       aria-expanded="false" id="account_dropdown">
+                        {{ uid }} <span class="caret"></span></a>
+                    <ul class="dropdown-menu drop">
+                        <li><a href="#"> Account</a></li>
+                        <li role="separator" class="dropdown-divider"></li>
+                        <li><a href="{% url 'logout' %}">Sign Out</a></li>
+                    </ul>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+</nav>

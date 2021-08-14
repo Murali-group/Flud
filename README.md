@@ -1,4 +1,4 @@
-<img src="https://github.com/Murali-group/flud/blob/master/app/static/img/flud_logo1.png" alt="Flud" width="100px">
+<img src="https://github.com/Murali-group/Flud/blob/develop/app/static/img/flud_logo1.png" alt="Flud" width="100px">
 
 ------
 # Flud: a game used for visualizing biological networks
@@ -74,7 +74,10 @@ If you have questions or suggestions about Flud, please contact
 - **T.M. Murali ([@tmmurali](https://github.com/tmmurali))**
 
 
-License
-=================
+# License
 
 GraphSpace is available under the GNU General Public License v3.0 license. See [LICENSE](https://github.com/Murali-group/Flud/blob/master/LICENSE) for more information.
+
+# Don't forget to cite us :)
+
+https://arxiv.org/abs/1908.07471

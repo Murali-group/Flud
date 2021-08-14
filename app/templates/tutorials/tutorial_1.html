@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% load static %}
+    {% csrf_token %}
+
+    <!-- Graph -->
+    <div id="cy">
+        <!-- Informs the user if they have done a beneficial or detrimental move -->
+        <div id="status">
+            <img id="thumb_up" src="{% static 'img/game/thumbs_up.png' %}" width="100" style="display: none">
+            <img id="thumb_down" src="{% static 'img/game/thumbs_down.png' %}" width="100" style="display: none">
+        </div>
+    </div>
+
+    <!-- Menu Sidebar -->
+    <div class="side-menu">
+        <div class="header">
+            <h1>Beat This!</h1>
+            <h1 id="currentTopScore">{{ score }} by {{ top_scorer }}</h1>
+        </div>
+        <div style="text-align: center;" id="selection" class="input-group">
+            <button title="Hint" class="btn btn-lg btn-primary" value="clue" id="hint"
+                    data-intro="Get a clue on what node to move." data-step="4"><i class="fa fa-lightbulb-o"></i> Clue
+            </button>
+            <hr>
+            <div id="undo_redo" class="btn-group">
+                <button title="Undo last change" class="btn btn-lg btn-primary" value="undo" id="undo"
+                        data-intro="Undo previous action." data-step="2"><i class="fa fa-mail-reply"></i> Undo
+                </button>
+                <button title="Redo change" class="btn btn-lg btn-primary" value="redo" id="redo"
+                        data-intro="Redo previous action." data-step="3"><i class="fa fa-mail-forward"></i> Redo
+                </button>
+            </div>
+            <hr>
+            <h4>Your Score</h4>
+            <div class="score_tag">
+                <h1 id="score" value="score" data-intro="Shows your current score." data-step="8"></h1>
+            </div>
+            <button id="finish" type="button" class="btn btn-lg btn-primary" data-toggle="modal"
+                    data-target="#finishedDialogueModal" value="finished"
+                    data-intro="When you're done, click here to see how you rank." data-step="9">Finished
+            </button>
+        </div>
+        <div class="footer">
+            <button title="Help" class="btn btn-secondary" value="help" id="help"><i class="fa fa-question"></i> Help
+            </button>
+        </div>
+    </div>
+
+    <!-- Help -->
+    </div>
+    <!-- end class = side_menu -->
+    <p style="z-index:100000;position:fixed; top:40%; left:40%;"
+       data-intro="Welcome to Flud! To leave this tour, please press either the Skip button below or just click anywhere outside this box."
+       data-step='1'></p>
+    </div>
+
+    <!-- Finished Dialogue Modal -->
+    <div id="finishedDialogueModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Results</h4>
+                </div>
+                <div class="modal-body" id="finishedDescription">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" id="save">Finish</button>
+                    <button id="keep_playing" type="button" class="btn btn-default" data-dismiss="modal">Keep playing
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Load the Graph Data -->
+    <script>
+        var graph_json = {{ graph_json|safe }};
+        var layout = {{ layout|safe }};
+        var graph_id = {{ graph_id|safe }};
+        var username = "{{ uid|safe }}";
+        var name = "{{ name|safe }}";
+        var highScore = {{ score|safe }};
+    </script>
+
+    <script type="text/javascript" src="{% static 'components/cytoscape/dist/cytoscape.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'components/cytoscape-panzoom/cytoscape.js-panzoom.css' %}"/>
+    <script type="text/javascript" src="{% static 'components/cytoscape-panzoom/cytoscape-panzoom.js' %}"></script>
+
+    <script type="text/javascript" src="{% static 'components/webcola/WebCola/cola.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'components/cytoscape-cola/cytoscape-cola.js' %}"></script>
+
+    <script src="{% static 'js/ajax_calls.js' %}"></script>
+
+    <!-- Load the Graph Data -->
+    <script src="{% static 'js/gameplay.js' %}"></script>
+    <script src="{% static 'js/cytoscape-simulated-annealing.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,442 @@
+<div style="min-height: 600px; height: 92vh;">
+    <br>
+    <div class="text-center">
+        <div class="row">
+            <div class="col-md-4 flud-user-score">
+                <p class="lead zero-margin" style="font-size: 14px;">Your score</p>
+                <p class="lead zero-margin" id="score" value="score" data-intro="Shows your current score."
+                   data-step="8" style="display:inline;"><i class="fas fa-spinner fa-pulse fa-fw"></i></p>
+                <p id="userPoints" class="green" style="font-size: 0.6em;"></p>
+            </div>
+            <div class="col-md-4 flud-current-score">
+                <p class="lead zero-margin" style="font-size: 14px;">Top score</p>
+                <p class="lead zero-margin" id="currentTopScore"><i
+                        class="fas fa-spinner fa-pulse fa-fw"></i></p>
+            </div>
+            <div class="col-md-4 flud-moves-left" style="display:none">
+                <p class="lead zero-margin" style="font-size: 14px;">Moves left</p>
+                <p class="lead zero-margin" id="NumStepsLeft">{{ num_steps }}</p>
+            </div>
+
+            <div class="col-md-4 flud-time-left">
+                <p class="lead zero-margin" style="font-size: 14px;">Mins left</p>
+                <p class="lead zero-margin" id="NumMinsLeft">{{ 60 }}</p>
+            </div>
+        </div>
+    </div>
+    {% if compensation_data%}
+    <!-- <br> -->
+    <div class="{% if volunteer_user %}hidden{% endif %}">
+      <!-- <div class="col-md-6 bonus bonus-earned">
+          <p class="lead zero-margin green" style="font-size: 16px;">Bonus Earned: $<span id="totalBonus">0</span></p>
+      </div> -->
+      <div class="col-md-6 bonus bonus-left hidden">
+          <p class="lead zero-margin" style="font-size: 16px;">
+            Bonus Left: $<span id="downwardPointingPathScorePay" class="flud-sub-score-pay {% if mode != 'dpp' %}hidden{% endif %}">{{compensation_data.DPP_BUDGET}}</span><span id="edgeCrossingsScorePay" class="flud-sub-score-pay {% if mode != 'edgecrossings' %}hidden{% endif %}">{{compensation_data.EC_BUDGET}}</span><span id="edgeLengthScorePay" class="flud-sub-score-pay {% if mode != 'edgelength' %}hidden{% endif %}">{{compensation_data.EL_BUDGET}}</span><span id="nodeDistributionScorePay" class="flud-sub-score-pay  {% if mode != 'nodedistribution' %}hidden{% endif %}">{{compensation_data.ND_BUDGET}}</span><span id="nodeEdgeDistanceScorePay" class="flud-sub-score-pay {% if mode != 'nodeedgedistance' %}hidden{% endif %}">{{compensation_data.NED_BUDGET}}</span>
+          </p>
+      </div>
+      <div class="col-md-12">
+        <div class="progress" style="background-color: white;height: 24px;margin-top: 5px;">
+          <div id="bonusProgressBar" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%; background-color: #8edd8e; color: #2e353d; white-space: nowrap;line-height: 24px;font-size:14px;">
+            &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &#36;<span id="totalBonus">0</span><span> bonus earned out of &#36;</span><span class="{% if mode != 'dpp' %}hidden{% endif %}">{{compensation_data.DPP_BUDGET}}</span><span class="{% if mode != 'edgecrossings' %}hidden{% endif %}">{{compensation_data.EC_BUDGET}}</span><span class="{% if mode != 'edgelength' %}hidden{% endif %}">{{compensation_data.EL_BUDGET}}</span><span class="{% if mode != 'nodedistribution' %}hidden{% endif %}">{{compensation_data.ND_BUDGET}}</span><span class="{% if mode != 'nodeedgedistance' %}hidden{% endif %}">{{compensation_data.NED_BUDGET}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    {% endif %}
+    <br><br>
+
+    <div class="">
+
+        <!-- {% if num_goals > 1 and num_goals < totalweight %}
+            <div class="weights-legend gs-full-width">
+                <span style="float: left; color: #08306b;">Low priority</span>
+                <span style="float: right; color: #ffffff;">High priority</span>
+            </div>
+        {% endif %} -->
+        <div class="flud-thumbs-icon flud-thumbs-up green" style="display: none">
+          <div class="animated infinite tada" style="background-color: transparent"></div>
+            <!-- <i class="fas fa-thumbs-up fa-10x green animated infinite tada"></i> -->
+        </div>
+        <div class="flud-thumbs-icon flud-thumbs-down red" style="display: none">
+          <div class="animated infinite tada" style="background-color: transparent"></div>
+            <!-- <i class="fas fa-thumbs-down fa-10x red animated infinite tada"></i> -->
+        </div>
+        <ul class="list-group scores-list" id="accordion" role="tablist" aria-multiselectable="true">
+            {% if weights.dpp > 0 %}
+                <li id="DPPAccordion" class="list-group-item dpp collapsed action" data-toggle="tooltip" data-placement="top"
+                        title="Maximize the number of downward pointing paths from triangles to rectangles/squares">
+                    <!-- <i class="far fa-plus-square accordian-icon fa-fw"></i> -->
+                    <div class="subscore-weight"><img src="/static/img/icon/coin-icon.png" alt="points" style="margin-right: 0px" width="25" height="25"><img src="/static/img/icon/coin-icon.png" alt="points" style="margin-left: -10px; " width="25" height="25"><div class="centered">x{{weights.dpp}}</div></div>
+                        <span class="badge flud-sub-score" id="downwardPointingPathScore"><i
+                                class="fas fa-spinner fa-pulse fa-fw"></i></span>
+                    Downward pointing paths
+                </li>
+                <div id="DPPTools" class="panel-collapse collapse score-tools dpp" role="tabpanel"
+                     aria-labelledby="headingTwo" data-mode="DPP_MODE">
+                    <div class="panel-body text-center">
+                        <!-- <p class="small"><b>Bonus goal</b>: Maximize the number of downward pointing paths from triangles to rectangles/squares.</p> -->
+                        {% if volunteer_user and mode == 'dpp' %}
+                          <p class="small">Your primary goal is to maximize the number of downward pointing paths from triangles to squares.</p>
+                        {% endif %}
+                        <p class="small {% if volunteer_user %}hidden{% endif %}"><span id="dppBonusTip"></span></p>
+                        <div class="row text-center">
+                            <!-- <button type="button" class="btn btn-xs btn-default action" title="Hint" value="clue"
+                                    id="hint"
+                                    data-intro="Get a clue on what node to move." data-step="4"
+                                    onclick="fludToolbox.DPPTool.hint();">Clue <i
+                                    class="far fa-lightbulb yellow"></i>
+                            </button> -->
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if weights.edgecrossings > 0 %}
+                <li id="ECAccordion" class="list-group-item edgecrossings collapsed action" data-toggle="tooltip" data-placement="top"
+                        title="Maximize the number of non-crossing edge pairs">
+                    <!-- <i class="far fa-plus-square accordian-icon fa-fw"></i> -->
+                    <div class="subscore-weight"><img src="/static/img/icon/coin-icon.png" alt="points" style="margin-right: 0px" width="25" height="25"><img src="/static/img/icon/coin-icon.png" alt="points" style="margin-left: -10px; " width="25" height="25"><div class="centered">x{{weights.edgecrossings}}</div></div>
+
+                    <span class="badge flud-sub-score" id="edgeCrossingsScore"><i
+                            class="fas fa-spinner fa-pulse fa-fw"></i></span>
+                    Non-crossing edge pairs
+                </li>
+                <div id="ECTools" class="panel-collapse collapse score-tools edgecrossings" role="tabpanel"
+                     aria-labelledby="headingTwo" data-mode="EC_MODE">
+                    <div class="panel-body text-center">
+                        <!-- <p class="small">Maximize the number of non-crossing edge pairs.</p> -->
+                        {% if volunteer_user and mode == 'edgecrossings' %}
+                          <p class="small">Your primary goal is to maximize the number of non-crossing edge pairs.</p>
+                        {% endif %}
+                        <p class="small {% if volunteer_user %}hidden{% endif %}"><span id="ecBonusTip"></span></p>
+                        <div class="row text-center">
+                            <!-- <button type="button" class="btn btn-xs btn-default action" title="Hint" value="clue"
+                                    id="ECHint"
+                                    data-intro="Get a clue on what node to move."
+                                    onclick="fludToolbox.ECTool.hint();">Clue <i
+                                    class="far fa-lightbulb yellow"></i>
+                            </button> -->
+                            <!-- <a type="button" class="btn btn-xs btn-default action" title="Hint Help"
+                                    id="ECHintHelp" href="https://youtu.be/yiB6-qaXhng" target="_blank">
+                                    Remind me how to use clues <i class="fab fa-youtube red"></i>
+                            </a> -->
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if weights.edgelength > 0 %}
+                <li id="ELAccordion" class="list-group-item edgelength collapsed action" data-toggle="tooltip" data-placement="top"
+                        title="Bring connected nodes closer to each other ( but not too close! )">
+                    <!-- <i class="far fa-plus-square accordian-icon fa-fw"></i> -->
+                    <div class="subscore-weight"><img src="/static/img/icon/coin-icon.png" alt="points" style="margin-right: 0px" width="25" height="25"><img src="/static/img/icon/coin-icon.png" alt="points" style="margin-left: -10px; " width="25" height="25"><div class="centered">x{{weights.edgelength}}</div></div>
+
+                            <span class="badge flud-sub-score" id="edgeLengthScore"><i
+                                    class="fas fa-spinner fa-pulse fa-fw"></i></span>
+                    Edge length
+                </li>
+                <div id="ELTools" class="panel-collapse collapse score-tools edgelength" role="tabpanel"
+                     aria-labelledby="headingTwo" data-mode="EL_MODE">
+                    <div class="panel-body text-center">
+                        <!-- <p class="small">Bring connected nodes closer to each other ( but not too close! ).</p> -->
+                        {% if volunteer_user and mode == 'edgelength' %}
+                          <p class="small">Your primary goal is to bring connected nodes closer to each other ( but not too close! ).</p>
+                        {% endif %}
+                        <p class="small {% if volunteer_user %}hidden{% endif %}"><span id="elBonusTip"></span></p>
+                        <div class="row text-center">
+                            <!-- <button type="button" class="btn btn-xs btn-default action" title="Hint" value="clue"
+                                    id="ELHint"
+                                    data-intro="Get a clue on what node to move."
+                                    onclick="fludToolbox.ELTool.hint();">Clue <i
+                                    class="far fa-lightbulb yellow"></i>
+                            </button> -->
+                            <!-- <a type="button" class="btn btn-xs btn-default action" title="Hint Help"
+                                    id="ELHintHelp" href="https://youtu.be/JjHEJ64qN1I" target="_blank">
+                                    Remind me how to use clues <i class="fab fa-youtube red"></i>
+                            </a> -->
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if weights.nodedistribution > 0 %}
+                <li id="NDAccordion" class="list-group-item nodedistribution collapsed action" data-toggle="tooltip" data-placement="top"
+                        title="Increase the distance between disconnected pair of nodes while keeping the nodes within the screen boundries">
+                    <!-- <i class="far fa-plus-square accordian-icon fa-fw"></i> -->
+                    <div class="subscore-weight"><img src="/static/img/icon/coin-icon.png" alt="points" style="margin-right: 0px" width="25" height="25"><img src="/static/img/icon/coin-icon.png" alt="points" style="margin-left: -10px; " width="25" height="25"><div class="centered">x{{weights.nodedistribution}}</div></div>
+
+                            <span class="badge flud-sub-score" id="nodeDistributionScore"><i
+                                    class="fas fa-spinner fa-pulse fa-fw"></i></span>
+                    Node distribution
+                </li>
+                <div id="NDTools" class="panel-collapse collapse score-tools nodedistribution" role="tabpanel"
+                     aria-labelledby="headingTwo" data-mode="CUSTOM_MODE">
+                    <div class="panel-body text-center">
+                        <!-- <p class="small">Increase the distance between disconnected pair of nodes while keeping the nodes within the screen boundries.</p> -->
+                        {% if volunteer_user and mode == 'nodedistribution' %}
+                          <p class="small">Your primary goal is to increase the distance between disconnected pair of nodes while keeping the nodes within the screen boundries.</p>
+                        {% endif %}
+                        <p class="small {% if volunteer_user %}hidden{% endif %}"><span id="ndBonusTip"></span></p>
+                        <div class="row text-center">
+                            <!-- <button type="button" class="btn btn-xs btn-default action" title="Hint" value="clue"
+                                    id="NDHint"
+                                    data-intro="Get a clue on what node to move."
+                                    onclick="fludToolbox.NDTool.hint();">Clue <i
+                                    class="far fa-lightbulb yellow"></i>
+                            </button> -->
+                            <!-- <a type="button" class="btn btn-xs btn-default action" title="Hint Help"
+                                    id="NDHintHelp" href="https://youtu.be/KRfKqhtkbMM" target="_blank">
+                                    Remind me how to use clues <i class="fab fa-youtube red"></i>
+                            </a> -->
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if weights.nodeedgedistance > 0 %}
+                <li id="NEDAccordion" class="list-group-item nodeedgedistance collapsed action" data-toggle="tooltip" data-placement="top"
+                        title="Increase separation between nodes and edges while keeping the nodes within the screen boundries">
+                    <!-- <i class="far fa-plus-square accordian-icon fa-fw"></i> -->
+                    <div class="subscore-weight"><img src="/static/img/icon/coin-icon.png" alt="points" style="margin-right: 0px" width="25" height="25"><img src="/static/img/icon/coin-icon.png" alt="points" style="margin-left: -10px; " width="25" height="25"><div class="centered">x{{weights.nodeedgedistance}}</div></div>
+
+                            <span class="badge flud-sub-score" id="nodeEdgeDistanceScore"><i
+                                    class="fas fa-spinner fa-pulse fa-fw"></i></span>
+                    Node edge separation
+                </li>
+                <div id="NEDTools" class="panel-collapse collapse score-tools nodeedgedistance" role="tabpanel"
+                     aria-labelledby="headingTwo" data-mode="CUSTOM_MODE">
+                    <div class="panel-body text-center">
+                      {% if volunteer_user and mode == 'nodeedgedistance' %}
+                        <p class="small">You primary goal is to increase separation between nodes and edges while keeping the nodes within the screen boundries.</p>
+                      {% endif %}
+                        <p class="small {% if volunteer_user %}hidden{% endif %}"><span id="nedBonusTip"></span></p>
+                        <div class="row text-center">
+                            <!-- <button type="button" class="btn btn-xs btn-default action" title="Hint" value="clue"
+                                    id="NEDHint"
+                                    data-intro="Get a clue on what node to move."
+                                    onclick="fludToolbox.NEDTool.hint();">Clue <i
+                                    class="far fa-lightbulb yellow"></i>
+                            </button> -->
+                            <!-- <a type="button" class="btn btn-xs btn-default action" title="Hint Help"
+                                    id="NEDHintHelp" href="https://youtu.be/HdR9bVWN96E" target="_blank">
+                                    Remind me how to use clues <i class="fab fa-youtube red"></i>
+                            </a> -->
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if weights.custom > 0 %}
+                <li id="CustomAccordion" class="list-group-item custom collapsed action" data-toggle="collapse"
+                    data-parent="#accordion"
+                    href="#CustomTools" aria-expanded="false" aria-controls="CustomTools">
+                    <!-- <i class="far fa-plus-square accordian-icon fa-fw"></i> -->
+                    Custom
+                </li>
+                <div id="CustomTools" class="panel-collapse collapse score-tools" role="tabpanel"
+                     aria-labelledby="headingTwo" data-mode="CUSTOM_MODE">
+                    <div class="panel-body">
+                        <ul style="list-style-position: inside;padding-left:0;">
+                            <li class="small">
+                                Arrange triangles to the top of the graph.
+                            </li>
+                            <li class="small">
+                                Arrange rectangles to the bottom of the graph.
+                            </li>
+                            <li class="small">
+                                Arrange similar nodes closer to each other.
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            {% endif %}
+        </ul>
+    </div>
+
+    <div class="text-center hidden">
+        <p class="lead">Select Nodes</p>
+        <div class="flud-btn-toolbar" role="toolbar" aria-label="...">
+            <div class="btn-group" data-toggle="buttons">
+                <button id="selectTriangleNodesBtn" type="button" class="btn btn-default action" data-toggle="tooltip" data-placement="top"
+                        title="Select triangles" onClick="fludToolbox.CustomTool.toggleSelect(this, TRIANGLE);">
+                        <input type="checkbox" autocomplete="off"> <span class="glyphicon glyphicon-triangle-top" aria-hidden="true"></span>
+                </button>
+
+                <button id="selectEllipseNodesBtn" type="button" class="btn btn-default action" data-toggle="tooltip" data-placement="top"
+                        title="Select ellipses" onClick="fludToolbox.CustomTool.toggleSelect(this, ELLIPSE);">
+                        <input type="checkbox" autocomplete="off"> <i class="far fa-circle"></i>
+                </button>
+
+                <button id="selectRectangleNodesBtn" type="button" class="btn btn-default action" data-toggle="tooltip" data-placement="top"
+                        title="Select rectangles" onClick="fludToolbox.CustomTool.toggleSelect(this, SQUARE);">
+                        <input type="checkbox" autocomplete="off"> <i class="far fa-square"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <br>
+
+    <div class="text-center">
+        <!-- <button id="bestLayoutBtn" type="button" class="btn btn-sm btn-default action"
+                onclick="fludToolbox.CustomTool.layout('preset');">
+            Go back to the top score
+        </button> -->
+
+        <div id="UndoRedoBtnGroup" class="btn-group btn-sm" role="group" aria-label="...">
+            <button type="button" class="btn btn-sm btn-default action" value="undo" data-toggle="tooltip" data-placement="top"
+                    title="Undo last change"
+                    id="undo"
+                    data-intro="Undo previous action." data-step="2">Undo <br>change <i class="fas fa-undo fa-fw"></i>
+            </button>
+            <button type="button" class="btn btn-sm btn-default action" data-toggle="tooltip" data-placement="top"
+                    title="Redo change" value="redo" id="redo"
+                    data-intro="Redo previous action." data-step="3">Redo <br>change <i class="fas fa-redo fa-fw"></i>
+            </button>
+
+            <button type="button" class="btn btn-sm btn-default action" data-toggle="tooltip" data-placement="top"
+                    title="Revert to top score" value="revert" id="bestLayoutBtn"
+                    onclick="fludToolbox.CustomTool.layout('preset');">Revert <br>to top score
+            </button>
+        </div>
+    </div>
+    <br>
+    <div class="text-center">
+        <!-- <p class="lead">Arrange Nodes</p> -->
+        <div class="flud-btn-toolbar" role="toolbar" aria-label="...">
+            <div class="btn-group hidden" role="group" aria-label="...">
+                <button type="button" class="btn btn-default action" data-toggle="tooltip" data-placement="top"
+                        title="Arrange nodes in a horizontal line"
+                        id="arrangeNodesHorizontalBtn"
+                        onclick="fludToolbox.CustomTool.layout(HORIZONTAL_LAYOUT);"><i
+                        class="fas fa-minus fa-fw"></i></button>
+                <button type="button" class="btn btn-default action" data-toggle="tooltip" data-placement="top"
+                        title="Arrange nodes in a vertical line"
+                        id="arrangeNodesVerticalBtn"
+                        onclick="fludToolbox.CustomTool.layout(VERTICAL_LAYOUT);"><i
+                        class="fas fa-minus fa-fw"
+                        data-fa-transform="rotate-90"></i>
+                </button>
+            </div>
+
+            <div id="expandSqueezeTool" class="btn-group" role="group" aria-label="...">
+
+                <button id="expandTool" type="button" class="btn btn-default action" data-toggle="tooltip" data-placement="top"
+                        title="Move nodes away from each other"
+                        onclick="fludToolbox.CustomTool.layout(EXPAND_LAYOUT);">Move <br>nodes apart <i
+                        class="glyphicon glyphicon-resize-full fa-fw"></i></button>
+                <button id="squeezeTool" type="button" class="btn btn-default action" data-toggle="tooltip"
+                        data-placement="top" title="Move nodes closer to each other"
+                        onclick="fludToolbox.CustomTool.layout(SQUEEZE_LAYOUT);">Squeeze <br>nodes closer <i
+                        class="glyphicon glyphicon-resize-small fa-fw"></i></button>
+            </div>
+
+            <!-- <div id="UndoRedoBtnGroup" class="btn-group" role="group" aria-label="...">
+                <button type="button" class="btn btn-default action" value="undo" data-toggle="tooltip" data-placement="top"
+                        title="Undo last change"
+                        id="undo"
+                        data-intro="Undo previous action." data-step="2"><i class="fas fa-undo fa-fw"></i>
+                </button>
+                <button type="button" class="btn btn-default action" data-toggle="tooltip" data-placement="top"
+                        title="Redo change" value="redo" id="redo"
+                        data-intro="Redo previous action." data-step="3"><i class="fas fa-redo fa-fw"></i>
+                </button>
+            </div> -->
+
+            <br>
+            <br>
+
+            <div class="btn-group hidden" role="group" aria-label="...">
+                <button type="button" class="btn btn-xs btn-default action" data-toggle="tooltip" data-placement="top"
+                        title="Arrange nodes in a open circle"
+                        onclick="fludToolbox.CustomTool.layout(CIRCLE_LAYOUT);"><br>Circle
+                </button>
+                <button type="button" class="btn btn-xs btn-default action" data-toggle="tooltip" data-placement="top"
+                        title="Arrange nodes in a concentric circle"
+                        onclick="fludToolbox.CustomTool.layout(CONCENTRIC_LAYOUT);"><br>Concentric
+                </button>
+                <button type="button" class="btn btn-xs btn-default action" data-toggle="tooltip" data-placement="top"
+                        title="Arrange nodes in a open square"
+                        onclick="fludToolbox.CustomTool.layout(SQUARE_LAYOUT);"><br>Square
+                </button>
+                <button type="button" class="btn btn-xs btn-default action" data-toggle="tooltip" data-placement="top"
+                        title="Arrange nodes in a grid"
+                        onclick="fludToolbox.CustomTool.layout(GRID_LAYOUT);"><br>Grid
+                </button>
+                <button type="button" class="btn btn-xs btn-default action" data-toggle="tooltip" data-placement="top"
+                        title="Arrange nodes in a hierarchy"
+                        onclick="fludToolbox.CustomTool.layout(TREE_LAYOUT);"><br>Tree
+                </button>
+                <button type="button" class="btn btn-xs btn-default action" data-toggle="tooltip" data-placement="top"
+                        title="Arrange nodes using physics simulation"
+                        onclick="fludToolbox.CustomTool.layout(SPRING_LAYOUT);">Spring
+                    <br>Embedder
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+
+    <hr>
+
+    <div class="row">
+      <div class="col-md-4">
+        <div class="text-center">
+            <button id="finishBtn" type="button" class="btn btn-sm btn-default action" data-toggle="modal"
+                    data-target="#finishedDialogueModal" value="finished">
+                Finished <br>
+                Game
+            </button>
+        </div>
+      </div>
+      <!-- <div class="col-md-4">
+        <div class="text-center">
+            <button id="exampleLayoutBtn" type="button" class="btn btn-sm btn-default action" data-toggle="modal"
+                    data-target="#exampleLayoutModal" value="exampleLayout">
+                Example High <br> Score Solution
+            </button>
+        </div>
+      </div> -->
+      {% if not volunteer_user %}
+      <div class="col-md-4">
+        <div class="text-center">
+          <button id="bonusTableBtn" type="button" class="btn btn-sm btn-default action"
+                  data-target="#bonusTableModal" data-toggle="modal" >
+            Game <br>Instructions
+          </button>
+        </div>
+      </div>
+      {% endif %}
+
+      {% if volunteer_user %}
+      <div class="col-md-4">
+        <div class="text-center">
+          <a class="btn btn-sm btn-default action" href="\tutorial\{{ graph_id }}">
+            Go to the <br> Tutorial
+          </a>
+        </div>
+      </div>
+      {% endif %}
+
+      {% if volunteer_user %}
+      <div class="col-md-4">
+        <div class="text-center">
+          <button id="leaderboardBtn" type="button" class="btn btn-sm btn-default action"
+                  data-target="#leaderboardModal" data-toggle="modal" >
+            Show <br>leaderboard
+          </button>
+        </div>
+      </div>
+      {% endif %}
+
+    </div>
+
+    <br>
+    <!-- <br><br> -->
+    <!-- <br><br> -->
+
+</div>

@@ -1,0 +1,41 @@
+<div class="modal fade" id="bonusModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Tutorial Completed!</h4>
+            </div>
+            <div class="modal-body text-center">
+                <div id="bonusModalBody" style="text-align:left; padding: 0 2em;">
+                  <p id='successTutorial' style="display:None;">You have successfully completed Part 1 of the tutorial.</p>
+                  <p id='failTutorial' style="display:None;">You have completed Part 1 of the tutorial.</p>
+                  <ul>
+                    <li id='successtask1' style="display:None;">Increased the score using a clue <i class="green fa fa-check" aria-hidden="true"></i></li>
+                    <li id='failtask1' style="display:None;">Increased the score using a clue <i class="red fa fa-times" aria-hidden="true"></i></li>
+                    <li id='successtask2' style="display:None;">Increased the score without using a clue <i class="green fa fa-check" aria-hidden="true"></i></li>
+                    <li id='failtask2' style="display:None;">Increased the score without using a clue <i class="red fa fa-times" aria-hidden="true"></i></li>
+                  </ul>
+                  <div id="promptGamePlay" style="display:None;">
+                    <p>Congratulations!  You have earned the opportunity to complete the rest of the tutorial and play the game where you can receive a bonus upto ${{bonus_pay}}. In the game, higher the score, higher the bonus!</p>
+                    <p>At the end of the game you will receive a bonus token. We will use this bonus token to make the bonus payment!</p>
+                    <div class="text-center">
+                      <a type="button" class="btn btn-success" href="{{redirect_url}}" target="_blank">Continue the tutorial and Play the game for bonus</a>
+                    </div>
+                    <p><b>Note:</b> The link to the bonus game will expire in an hour.</p>
+                    <br>
+                    <p>If you are not interested in playing the game for bonus, you can submit the HIT without the bonus token.</p>
+                  </div>
+                </div>
+                <br>
+                <form id="mturk_form" action="{{ amazon_host }}/mturk/externalSubmit" method="POST">
+                    {% csrf_token %}
+                    <textarea rows="2" cols="50" name="feedback" placeholder="Enter your bonus token here (if you received one)."></textarea>
+                    <input type="hidden" id="assignmentId" value="{{ assignment_id }}" name="assignmentId"/>
+                    <br/>
+                    <input type="hidden" id="workerId" value="{{ worker_id }}" name="workerId"/>
+                    <input type="hidden" id="hitId" value="{{ hit_id }}" name="hitId"/>
+                    <button class="btn btn-success" type="submit" value="Submit">Submit HIT</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
