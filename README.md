@@ -72,3 +72,9 @@ If you have questions or suggestions about Flud, please contact
 - **Aditya Bharadwaj ([@adbharadwaj](https://github.com/adbharadwaj))**
 - **Kurt Luther ([@kluther](https://github.com/kluther))**
 - **T.M. Murali ([@tmmurali](https://github.com/tmmurali))**
+
+
+License
+=================
+
+GraphSpace is available under the GNU General Public License v2.0 license. See [LICENSE.md](https://github.com/Murali-group/Flud/blob/master/LICENSE.md) for more information.
