@@ -80,4 +80,4 @@ GraphSpace is available under the GNU General Public License v3.0 license. See [
 
 # Don't forget to cite us :)
 
-https://arxiv.org/abs/1908.07471
+https://dx.doi.org/10.1145/3479196
