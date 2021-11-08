@@ -3,6 +3,8 @@
 ------
 # Flud: a game used for visualizing biological networks
 
+Play online at http://flud.graphspace.org/
+
 # Installation Instructions
 Here are steps you need to follow to get the system up and running
 
